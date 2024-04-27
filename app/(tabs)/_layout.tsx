@@ -1,59 +1,83 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { View, Text, Image } from "react-native";
+import React from "react";
+import { Tabs, Redirect } from "expo-router";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { icons } from "../../constants";
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const TabIcon = ({ icon, color, name, focused }: { icon: any; color: string; name: string; focused: boolean }) => {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
+    <View className="items-center justify-center gap-2">
+      <Image source={icon} resizeMode="contain" tintColor={color} className="h-6 w-6" />
+      <Text className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`} style={{ color: color }}>
+        {name}
+      </Text>
+    </View>
   );
-}
+};
+
+const TabsLayout = () => {
+  return (
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: "#FFA001",
+          tabBarInactiveTintColor: "#CDCDE0",
+          tabBarStyle: {
+            backgroundColor: "#161622",
+            borderTopWidth: 1,
+            borderTopColor: "#232533",
+            height: 84,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: "Home",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon icon={icons.home} color={color} name="Home" focused={focused} />
+            ),
+          }}
+        />
+        {/* bookmark */}
+        <Tabs.Screen
+          name="bookmark"
+          options={{
+            title: "Bookmark",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon icon={icons.bookmark} color={color} name="Bookmark" focused={focused} />
+            ),
+          }}
+        />
+        {/* create */}
+        <Tabs.Screen
+          name="create"
+          options={{
+            title: "Create",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon icon={icons.plus} color={color} name="Create" focused={focused} />
+            ),
+          }}
+        />
+
+        {/* profile */}
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Profile",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon icon={icons.profile} color={color} name="Profile" focused={focused} />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
+  );
+};
+
+export default TabsLayout;
