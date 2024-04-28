@@ -1,12 +1,16 @@
 import CustomButton from "@/components/custom-button";
 import { images } from "@/constants";
-import { router } from "expo-router";
+import { useGlobalContext } from "@/context/global-provider";
+import { Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const App = () => {
+  const { loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) return <Redirect href="/home" />;
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView
